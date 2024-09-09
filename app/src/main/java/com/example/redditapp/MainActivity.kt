@@ -1,20 +1,36 @@
 package com.example.redditapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.redditapp.ui.theme.RedditAppTheme
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.redditapp.adapter.PostAdapter
+import com.example.redditapp.model.RedditResponse
+import com.example.redditapp.network.RedditClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        RedditClient.retrofit.getTopPosts(10).enqueue(object : Callback<RedditResponse> {
+            override fun onResponse(call: Call<RedditResponse>, response: Response<RedditResponse>) {
+                if (response.isSuccessful) {
+                    val posts = response.body()?.data?.children?.map { it.data } ?: emptyList()
+                    recyclerView.adapter = PostAdapter(posts)
+                }
+            }
+
+            override fun onFailure(call: Call<RedditResponse>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
+            }
+        })
     }
 }
