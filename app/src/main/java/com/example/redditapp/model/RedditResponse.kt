@@ -1,3 +1,5 @@
 package com.example.redditapp.model
 
-data class RedditResponse(val data: RedditData)
+import com.google.gson.annotations.SerializedName
+
+data class RedditResponse(@SerializedName("data") val data: RedditData)
