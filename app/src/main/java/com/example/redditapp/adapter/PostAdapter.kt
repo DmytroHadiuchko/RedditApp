@@ -1,6 +1,5 @@
 package com.example.redditapp.adapter
 
-import android.R.attr.path
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -22,9 +21,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.redditapp.R
+import com.example.redditapp.databinding.ItemPostBinding
 import com.example.redditapp.model.RedditPost
 import java.io.File
 import java.io.FileOutputStream
@@ -34,22 +32,19 @@ import kotlin.text.isNotEmpty
 class PostAdapter(private val posts: List<RedditPost>) :
     RecyclerView.Adapter<PostAdapter.PostViewHolder>()  {
 
-        class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val titleTextView: TextView = view.findViewById(R.id.titleTextView)
-            val authorTextView: TextView = view.findViewById(R.id.authorTextView)
-            val thumbnailImageView: ImageView = view.findViewById(R.id.thumbnailImageView)
-            val createdTextView: TextView = view.findViewById(R.id.createdTextView)
-            val commentsTextView: TextView = view.findViewById(R.id.commentsTextView)
-            val saveButton : Button = view.findViewById(R.id.saveButton)
+        class PostViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
+            val titleTextView: TextView = binding.titleTextView
+            val authorTextView: TextView = binding.authorTextView
+            val thumbnailImageView: ImageView = binding.thumbnailImageView
+            val createdTextView: TextView = binding.createdTextView
+            val commentsTextView: TextView = binding.commentsTextView
+            val saveButton : Button = binding.saveButton
         }
 
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): PostViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
-        return PostViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PostViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
