@@ -1,4 +1,4 @@
-package com.example.redditapp.network
+package com.example.redditapp.api
 
 import com.example.redditapp.model.RedditResponse
 import retrofit2.Call
